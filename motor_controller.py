@@ -1,6 +1,6 @@
-import RPi.GPIO as GPIO
 import time
-from enum import Enum
+
+import RPi.GPIO as GPIO
 
 motor_pin1 = 13
 motor_pin2 = 12
@@ -17,43 +17,43 @@ turn_duty = 30
 turn_slp_interval = 0.125
 
 
-
-class Direction(Enum):
-    ABSOLUTE_LEFT = 0
-    MID_LEFT = 1
-    MIDDLE = 2
-    MID_RIGHT = 3
-    ABSOLUTE_RIGHT = 4
-
-    GENERAL_LEFT = 5
-    GENERAL_RIGHT = 6
-    
-    global current_direction
-    def __init__(self, *args):
-    	current_direction = MIDDLE
-
-    def validateDirection(direction):
-        if not isinstance(Direction):
-            raise TypeError('Invalid parameter to normalize in direction')
-
-    # todo add print statements
-    def adjDirection(direction):
-        validateDirection(direction)
-
-        # edge cases
-        if direction == Direction.ABSOLUTE_LEFT:
-            current_direction = Direction.ABSOLUTE_LEFT
-
-        elif direction == Direction.ABSOLUTE_RIGHT:
-            current_direction = Direction.ABSOLUTE_RIGHT
-
-        elif direction == Direction.GENERAL_RIGHT:
-        # from the middle, going right gets greater
-        # see python enum docs as to why this works
-            current_direction = Direction(current_direction.value + 1)
-
-        elif direction == Direction.GENERAL_LEFT:
-            current_direction = Direction(current_direction.value - 1)
+#
+# class Direction(Enum):
+#     ABSOLUTE_LEFT = 0
+#     MID_LEFT = 1
+#     MIDDLE = 2
+#     MID_RIGHT = 3
+#     ABSOLUTE_RIGHT = 4
+#
+#     GENERAL_LEFT = 5
+#     GENERAL_RIGHT = 6
+#
+#     global current_direction
+#     def __init__(self, *args):
+#         current_direction = self.MIDDLE
+#
+#     def validateDirection(direction):
+#         if not isinstance(Direction):
+#             raise TypeError('Invalid parameter to normalize in direction')
+#
+#     # todo add print statements
+#     def adjDirection(direction):
+#         validateDirection(direction)
+#
+#         # edge cases
+#         if direction == Direction.ABSOLUTE_LEFT:
+#             current_direction = Direction.ABSOLUTE_LEFT
+#
+#         elif direction == Direction.ABSOLUTE_RIGHT:
+#             current_direction = Direction.ABSOLUTE_RIGHT
+#
+#         elif direction == Direction.GENERAL_RIGHT:
+#         # from the middle, going right gets greater
+#         # see python enum docs as to why this works
+#             current_direction = Direction(current_direction.value + 1)
+#
+#         elif direction == Direction.GENERAL_LEFT:
+#             current_direction = Direction(current_direction.value - 1)
 
 
 # start in middle
@@ -140,19 +140,18 @@ def turn(pwm_turn):
 
 
 def turnLeft():
-    turn(pwm1)
-    if:
-        pass
+    resetTurnPWMS()
+    turn(turn1)
 
 
 def turnRight():
     resetTurnPWMS()
-    turn2.ChangeDutyCycle(turn_duty)
-    turn
+    turn(turn2)
+
 
 
 def turnToDirection(direction):
-	pass
+    pass
 
 def main():
     setup()
