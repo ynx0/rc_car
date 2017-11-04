@@ -10,11 +10,13 @@ turn_pin2 = 24
 pwm_freq = 20  # hz, allows for more granular speed control than say, 300hz
 turn_freq = 10
 
-min_speed = 20  # duty cycle
-max_speed = 35  # can actually go higher, like 100% duty cycle, but eh
+min_speed = 20.0  # duty cycle
+max_speed = 35.0  # can actually go higher, like 100% duty cycle, but eh
 
 turn_duty = 30
 turn_slp_interval = 0.125
+
+smooth_duty_cycle = ((i*10**exp)/1000 for exp in range(2, 5) for i in range(1, 4))
 
 
 #
@@ -82,10 +84,8 @@ def setup():
     turn2.start(0)
 
 
-
 def stop(pwm):
     pwm.ChangeDutyCycle(0)
-
 
 def stopBoth():
     stop(motor1)
@@ -101,7 +101,6 @@ def normalize(speed):
 
     return speed
 
-
 def forward(speed=min_speed):
     speed = normalize(speed)
     motor1.ChangeDutyCycle(speed)
@@ -114,15 +113,26 @@ def backward(speed=min_speed):
     motor1.ChangeDutyCycle(0)
 
 
+def generateSmooth(ceil):
+  return ((i*10**exp)/1000 for exp in range(2,5) for i in range(1,ceil))
+
+
+def generateSmoothBack(ceil):
+  return reversed(list(generateSmooth(ceil)))
+
 def smoothStop():
     pass
 
 
 def smoothForward():
     pass
-
+def smoothForward(speed_ceil):
+    for cycle in generateSmooth(speed_ceil):
+	forward(cycle)
 
 def smoothBackward(speed_ceil):
+    for cycle in generateSmoothBack(speed_ceil):
+	backward(cycle)
     pass
 
 
