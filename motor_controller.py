@@ -2,8 +2,11 @@ import time
 
 import RPi.GPIO as GPIO
 
-motor_pin1 = 13
-motor_pin2 = 12
+# left side of pi
+motor_pin1 = 27
+motor_pin2 = 22
+
+# right side of pi
 turn_pin1 = 23
 turn_pin2 = 24
 
@@ -16,7 +19,7 @@ max_speed = 35.0  # can actually go higher, like 100% duty cycle, but eh
 turn_duty = 30
 turn_slp_interval = 0.125
 
-smooth_duty_cycle = ((i*10**exp)/1000 for exp in range(2, 5) for i in range(1, 4))
+smooth_duty_cycle = ((i * 10 ** exp) / 1000 for exp in range(2, 5) for i in range(1, 4))
 
 
 #
@@ -114,25 +117,23 @@ def backward(speed=min_speed):
 
 
 def generateSmooth(ceil):
-  return ((i*10**exp)/1000 for exp in range(2,5) for i in range(1,ceil))
+    return ((i * 10 ** exp) / 1000 for exp in range(2, 5) for i in range(1, ceil))
 
 
 def generateSmoothBack(ceil):
-  return reversed(list(generateSmooth(ceil)))
+    return reversed(list(generateSmooth(ceil)))
 
 def smoothStop():
     pass
 
 
-def smoothForward():
-    pass
 def smoothForward(speed_ceil):
     for cycle in generateSmooth(speed_ceil):
-	forward(cycle)
+        forward(cycle)
 
 def smoothBackward(speed_ceil):
     for cycle in generateSmoothBack(speed_ceil):
-	backward(cycle)
+        backward(cycle)
     pass
 
 
