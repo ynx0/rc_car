@@ -11,11 +11,13 @@ motor_pin2 = 22
 turn_pin1 = 23
 turn_pin2 = 24
 
-pwm_freq = 20  # hz, allows for more granular speed control than say, 300hz
+pwm_freq = 20  # hz, allows for more granular speed control than say, 300hz, also maybe consider using something like 50 hz b/c it is smoother
+# use lower hz for more torque, higher hz for more refined motor and higher speeds
+
 turn_freq = 10
 
 min_speed = 20.0  # duty cycle
-max_speed = 35.0  # can actually go higher, like 100% duty cycle, but eh
+max_speed = 35.0  # can actually go higher, like 100% duty cycle, but eh thats dangerous
 
 turn_duty = 30
 turn_slp_interval = 0.125
