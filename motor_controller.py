@@ -1,3 +1,4 @@
+import sys
 import time
 
 import RPi.GPIO as GPIO
@@ -21,6 +22,7 @@ turn_slp_interval = 0.125
 
 smooth_duty_cycle = ((i * 10 ** exp) / 1000 for exp in range(2, 5) for i in range(1, 4))
 
+debug = False
 
 #
 # class Direction(Enum):
@@ -87,6 +89,10 @@ def setup():
     turn2.start(0)
 
 
+def cleanup():
+    GPIO.cleanup()
+    print('\nexitting and cleaning up')
+
 def stop(pwm):
     pwm.ChangeDutyCycle(0)
 
@@ -105,6 +111,8 @@ def normalize(speed):
     return speed
 
 def forward(speed=min_speed):
+    if debug == True:
+        print('moving forward')
     speed = normalize(speed)
     motor1.ChangeDutyCycle(speed)
     motor2.ChangeDutyCycle(0)
@@ -165,6 +173,11 @@ def turnToDirection(direction):
     pass
 
 def main():
+    args = sys.argv[1:]
+
+    if args[0] == "debug" or args[0] == "-d":
+        debug = True
+
     setup()
     forward(30)
     time.sleep(10)
@@ -173,11 +186,11 @@ def main():
     backward(30)
     time.sleep(10)
     stopBoth()
+    cleanup()
     print('Finished :) Exitting')
 
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        GPIO.cleanup()
-        print('\nExitting')
+        cleanup()
