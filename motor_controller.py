@@ -14,14 +14,21 @@ turn_pinB2 = 24
 pwm_freq = 20  # hz, allows for more granular speed control than say, 300hz, also maybe consider using something like 50 hz b/c it is smoother
 turn_freq = 10 # use lower hz for more torque, higher hz for more refined motor and higher speeds
 
-
 # MARK - Speeds (Duty Cycles)
 min_speed = 20.0  # duty cycle
-max_speed = 35.0  # can actually go higher, like 100% duty cycle, but eh thats dangerous
+max_speed = 45.0  # can actually go higher, like 100% duty cycle, but eh thats dangerous
 turn_duty = 30
 turn_slp_interval = 0.125
 
-smooth_duty_cycle = ((i * 10 ** exp) / 1000 for exp in range(2, 5) for i in range(1, 4))
+# MARK - speeds used for kickoff to have a better start up
+kickoff_speed = 40
+kickoff_freq = 10
+last_kickoff = 0
+kickoff_threshold = 3 # seconds
+
+# MARK - defaults
+__default_freq = pwm_freq
+__default_speed = min_speed
 
 debug = True
 
@@ -90,11 +97,11 @@ def forward(speed=min_speed):
 
     if debug: print('moving forward at speed: ' + str(speed))
     speed = __normalize(speed)
+    kickoff()
     motor1.ChangeDutyCycle(speed)
     motor2.ChangeDutyCycle(0)
     current_speed = speed
     current_direction = Motion.FORWARD
-
 
 def backward(speed=min_speed):
     global current_speed
@@ -106,6 +113,23 @@ def backward(speed=min_speed):
     motor1.ChangeDutyCycle(0)
     current_speed = speed
     current_direction = Motion.BACKWARD
+
+def kickoff():
+    global kickoff_speed
+    global kickoff_freq
+    global last_kickoff
+    global kickoff_threshold
+
+    kickoff_delta = time.time() - last_kickoff
+    last_kickoff = time.time()
+    if kickoff_delta <= 3: # seconds
+        motor1.ChangeDutyCycle(kickoff_speed)
+        motor2.ChangeFrequency(kickoff_freq)
+        time.sleep(0.75)
+        last_kickoff = time.time()
+    else:
+        pass
+
 
 
 # MARK - Internal methods for speed generators
@@ -190,10 +214,8 @@ def changeRearFreq(freq):
     motor1.ChangeFrequency(freq)
     motor2.ChangeFrequency(freq)
 
-
-def turnToDirection(direction):
-    pass
-
+def resetRearFreq():
+    changeRearFreq(__default_freq)
 
 def main():
     print("disabled")
