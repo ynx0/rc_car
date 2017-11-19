@@ -74,7 +74,7 @@ def cleanup():
     GPIO.cleanup()
     print('\nexitting and cleaning up')
 
-def stop(pwm):
+def __stop(pwm):
     pwm.ChangeDutyCycle(0)
 
 def __resetTurnPWMS():
@@ -86,8 +86,8 @@ def stopAll():
     global current_speed
     global current_direction
 
-    stop(motor1)
-    stop(motor2)
+    __stop(motor1)
+    __stop(motor2)
     current_speed = 0
     current_direction = Motion.STOPPED
 
@@ -124,7 +124,8 @@ def kickoff():
     last_kickoff = time.time()
     if kickoff_delta <= 3: # seconds
         motor1.ChangeDutyCycle(kickoff_speed)
-        motor2.ChangeFrequency(kickoff_freq)
+        motor2.ChangeDutyCycle(0)
+        changeRearFreq(kickoff_freq)
         time.sleep(0.75)
         last_kickoff = time.time()
     else:
@@ -217,27 +218,5 @@ def changeRearFreq(freq):
 def resetRearFreq():
     changeRearFreq(__default_freq)
 
-def main():
-    print("disabled")
-    # args = sys.argv[1:]
-    #
-    # if args[0] == "debug" or args[0] == "-d":
-    #     debug = True
-    #
-    # setup()
-    # forward(30)
-    # time.sleep(10)
-    # stopBoth()
-    # time.sleep(5)
-    # backward(30)
-    # time.sleep(10)
-    # stopBoth()
-    # cleanup()
-    # print('Finished :) Exitting')
-
-
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        cleanup()
+    raise Exception("IdiocyException: Library file should not be run")
