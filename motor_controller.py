@@ -183,7 +183,7 @@ def turnRight():
 
 def __state_turn_left():
     global current_direction # why do i need this :(
-    print('current direction is: ' + current_direction)
+    print('current direction is: ' + current_direction.name)
     if current_direction is Turn.ABS_LEFT:
         if debug: print("Direction is already at ABS_LEFT")
     else:
@@ -191,7 +191,7 @@ def __state_turn_left():
 
 def __state_turn_right():
     global current_direction
-    print('current direction is: ' + current_direction)
+    print('current direction is: ' + current_direction.name)
     if current_direction is Turn.ABS_LEFT:
         if debug: print("Direction is already at ABS_RIGHT")
     else:
