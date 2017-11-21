@@ -27,7 +27,7 @@ last_kickoff = 0
 kickoff_threshold = 3 # seconds
 
 # MARK - defaults
-__default_freq = pwm_freq
+__default_freq = 20
 __default_speed = min_speed
 
 debug = True
@@ -127,7 +127,9 @@ def kickoff():
         motor2.ChangeDutyCycle(0)
         changeRearFreq(kickoff_freq)
         time.sleep(0.75)
+        resetRearFreq()
         last_kickoff = time.time()
+
     else:
         pass
 
